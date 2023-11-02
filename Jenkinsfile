@@ -46,7 +46,7 @@ pipeline {
                       cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                      helm upgrade --install  dev-app --values=values.yml --namespace dev
+                      helm upgrade --install dev-app helm --values=values.yml --namespace dev
                       '''
                       }
                   }
@@ -66,7 +66,7 @@ pipeline {
                       cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                      helm upgrade --install  qa-app --values=values.yml --namespace qa
+                      helm upgrade --install qa-app helm --values=values.yml --namespace qa
                       '''
                       }
                   }
@@ -86,7 +86,7 @@ pipeline {
                       cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                      helm upgrade --install  staging-app --values=values.yml --namespace staging
+                      helm upgrade --install staging-app helm --values=values.yml --namespace staging
                       '''
                       }
                   }
@@ -109,7 +109,7 @@ pipeline {
                       cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                      helm upgrade --install  prod-app --values=values.yml --namespace prod
+                      helm upgrade --install prod-app helm --values=values.yml --namespace prod
                       '''
                       }
                   }
