@@ -32,66 +32,87 @@ pipeline {
             }
         }
         stage('Deploy to Dev') {
-            steps {
-                script {
-                    sh '''
-                    rm -rf .kube
-                    mkdir .kube
-                    echo ${config} > .kube/config
-                    cp ./helm/dev/values.yaml values.yml
-                    sed -i "s+image.tag.*+image.tag: ${DOCKER_TAG}+g" values.yml
-                    helm upgrade --install dev-app ./helm/charts/app --values values.yml --namespace dev
-                    '''
-                }
-            }
-        }
+          environment
+              {
+              KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+              }
+                  steps {
+                      script {
+                      sh '''
+                      rm -Rf .kube
+                      mkdir .kube
+                      ls
+                      cat $KUBECONFIG > .kube/config
+                      cp fastapi/values.yaml values.yml
+                      cat values.yml
+                      sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                      helm upgrade --install  dev-app --values=values.yml --namespace dev
+                      '''
+                      }
+                  }
+          }
         stage('Deploy to QA') {
-            steps {
-                script {
-                    sh '''
-                    rm -rf .kube
-                    mkdir .kube
-                    echo ${config} > .kube/config
-                    cp ./helm/qa/values.yaml values.yml
-                    sed -i "s+image.tag.*+image.tag: ${DOCKER_TAG}+g" values.yml
-                    helm upgrade --install qa-app ./helm/charts/app --values values.yml --namespace qa
-                    '''
-                }
-            }
-        }
+          environment
+              {
+              KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+              }
+                  steps {
+                      script {
+                      sh '''
+                      rm -Rf .kube
+                      mkdir .kube
+                      ls
+                      cat $KUBECONFIG > .kube/config
+                      cp fastapi/values.yaml values.yml
+                      cat values.yml
+                      sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                      helm upgrade --install  qa-app --values=values.yml --namespace qa
+                      '''
+                      }
+                  }
+          }
         stage('Deploy to Staging') {
-            steps {
-                script {
-                    sh '''
-                    rm -rf .kube
-                    mkdir .kube
-                    echo ${config} > .kube/config
-                    cp ./helm/staging/values.yaml values.yml
-                    sed -i "s+image.tag.*+image.tag: ${DOCKER_TAG}+g" values.yml
-                    helm upgrade --install staging-app ./helm/charts/app --values values.yml --namespace staging
-                    '''
-                }
-            }
-        }
+          environment
+              {
+              KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+              }
+                  steps {
+                      script {
+                      sh '''
+                      rm -Rf .kube
+                      mkdir .kube
+                      ls
+                      cat $KUBECONFIG > .kube/config
+                      cp fastapi/values.yaml values.yml
+                      cat values.yml
+                      sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                      helm upgrade --install  staging-app --values=values.yml --namespace staging
+                      '''
+                      }
+                  }
+          }
         stage('Deploy to Prod') {
             when {
                 branch 'master'
             }
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    input message: 'Voulez-vous déployer en production ?', ok: 'Déployer'
-                }
-                script {
-                    sh '''
-                    rm -rf .kube
-                    mkdir .kube
-                    echo ${config} > .kube/config
-                    cp ./helm/prod/values.yaml values.yml
-                    sed -i "s+image.tag.*+image.tag: ${DOCKER_TAG}+g" values.yml
-                    helm upgrade --install prod-app ./helm/charts/app --values values.yml --namespace prod
-                    '''
-                }
-            }
+            environment
+              {
+              KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+              }
+                steps {
+                    script {
+                      sh '''
+                      rm -Rf .kube
+                      mkdir .kube
+                      ls
+                      cat $KUBECONFIG > .kube/config
+                      cp fastapi/values.yaml values.yml
+                      cat values.yml
+                      sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                      helm upgrade --install  prod-app --values=values.yml --namespace prod
+                      '''
+                      }
+                  }
         }
     }
     post {
