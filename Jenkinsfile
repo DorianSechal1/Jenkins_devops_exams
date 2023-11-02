@@ -43,7 +43,7 @@ pipeline {
                       mkdir .kube
                       ls
                       cat $KUBECONFIG > .kube/config
-                      cp fastapi/values.yaml values.yml
+                      cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                       helm upgrade --install  dev-app --values=values.yml --namespace dev
@@ -63,7 +63,7 @@ pipeline {
                       mkdir .kube
                       ls
                       cat $KUBECONFIG > .kube/config
-                      cp fastapi/values.yaml values.yml
+                      cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                       helm upgrade --install  qa-app --values=values.yml --namespace qa
@@ -83,7 +83,7 @@ pipeline {
                       mkdir .kube
                       ls
                       cat $KUBECONFIG > .kube/config
-                      cp fastapi/values.yaml values.yml
+                      cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                       helm upgrade --install  staging-app --values=values.yml --namespace staging
@@ -106,7 +106,7 @@ pipeline {
                       mkdir .kube
                       ls
                       cat $KUBECONFIG > .kube/config
-                      cp fastapi/values.yaml values.yml
+                      cp helm/values.yaml values.yml
                       cat values.yml
                       sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                       helm upgrade --install  prod-app --values=values.yml --namespace prod
