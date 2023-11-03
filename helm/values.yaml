@@ -8,7 +8,7 @@ movieService:
   image:
     repository: doriansechal/movie-service
     pullPolicy: IfNotPresent
-    tag: ""
+    tag: "latest"
 
   service:
     type: ClusterIP
@@ -33,7 +33,7 @@ castService:
   image:
     repository: doriansechal/cast-service
     pullPolicy: IfNotPresent
-    tag: ""
+    tag: "latest"
   
   service:
     type: ClusterIP
