@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: movie-service
-          image: "{{ .Values.movieService.image }}:{{ .Values.docker_tag }}"
+          image: "{{ .Values.movieService.image.repository }}:{{ .Values.movieService.image.tag }}"
           ports:
             - containerPort: {{ .Values.movieService.service.port }}
           volumeMounts:
@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
         - name: cast-service
-          image: "{{ .Values.castService.image }}:{{ .Values.docker_tag }}"
+          image: "{{ .Values.castService.image.repository }}:{{ .Values.castService.image.tag }}"
           ports:
             - containerPort: {{ .Values.castService.service.port }}
           volumeMounts:
@@ -83,7 +83,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: "{{ .Values.nginx.image }}"
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
           ports:
             - containerPort: {{ .Values.nginx.service.port }}
           volumeMounts:
