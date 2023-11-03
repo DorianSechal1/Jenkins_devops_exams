@@ -49,6 +49,7 @@ pipeline {
                       cat values.yml
                       sed -i "s+movieService.image.tag.*+movieService.image.tag: \"${DOCKER_TAG}\"+g" values.yml
                       sed -i "s+castService.image.tag.*+castService.image.tag: \"${DOCKER_TAG}\"+g" values.yml
+                      cat values.yml
                       helm upgrade --install dev-app ./helm --values=values.yml --namespace dev
                       '''
                       }
