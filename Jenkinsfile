@@ -11,8 +11,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker build -t $DOCKER_ID/$MOVIE_SERVICE_IMAGE:$DOCKER_TAG ./movie-service
-                    docker build -t $DOCKER_ID/$CAST_SERVICE_IMAGE:$DOCKER_TAG ./cast-service
+                    docker build -t $DOCKER_ID/$MOVIE_SERVICE_IMAGE:$DOCKER_TAG -t $DOCKER_ID/$MOVIE_SERVICE_IMAGE:latest ./movie-service
+                    docker build -t $DOCKER_ID/$CAST_SERVICE_IMAGE:$DOCKER_TAG -t $DOCKER_ID/$CAST_SERVICE_IMAGE:latest ./cast-service
                     sleep 6
                     '''
                 }
@@ -26,7 +26,9 @@ pipeline {
                 script {
                     sh '''
                     docker push $DOCKER_ID/$MOVIE_SERVICE_IMAGE:$DOCKER_TAG
+                    docker push $DOCKER_ID/$MOVIE_SERVICE_IMAGE:latest
                     docker push $DOCKER_ID/$CAST_SERVICE_IMAGE:$DOCKER_TAG
+                    docker push $DOCKER_ID/$CAST_SERVICE_IMAGE:latest
                     '''
                 }
             }
