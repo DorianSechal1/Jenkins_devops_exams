@@ -9,7 +9,6 @@ movieService:
     repository: doriansechal/movie-service
     pullPolicy: IfNotPresent
     tag: "latest"
-
   service:
     type: ClusterIP
     port: 8001
@@ -34,7 +33,6 @@ castService:
     repository: doriansechal/cast-service
     pullPolicy: IfNotPresent
     tag: "latest"
-  
   service:
     type: ClusterIP
     port: 8002
@@ -50,7 +48,7 @@ castDb:
     POSTGRES_USER: cast_db_username
     POSTGRES_PASSWORD: cast_db_password
     POSTGRES_DB: cast_db_dev
-    service:
+  service:
     type: ClusterIP
     port: 5433
 

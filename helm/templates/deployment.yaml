@@ -35,6 +35,37 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "helm.fullname" . }}-movie-db
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.movieDb.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: movie-db
+          image: "{{ .Values.movieDb.image.repository }}:{{ .Values.movieDb.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.movieDb.service.port }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.movieDb.environment.POSTGRES_USER }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.movieDb.environment.POSTGRES_PASSWORD }}
+            - name: POSTGRES_DB
+              value: {{ .Values.movieDb.environment.POSTGRES_DB }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: {{ include "helm.fullname" . }}-cast-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
@@ -67,65 +98,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}-nginx
-  labels:
-    {{- include "helm.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
-spec:
-  replicas: {{ .Values.nginx.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "helm.selectorLabels" . | nindent 8 }}
-    spec:
-      containers:
-        - name: nginx
-          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
-          ports:
-            - containerPort: {{ .Values.nginx.service.port }}
-          volumeMounts:
-            - name: volume-nginx
-              mountPath: /etc/nginx/conf.d
-      volumes:
-        - name: volume-nginx
-        ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "helm.fullname" . }}-movie-db
-  labels:
-    {{- include "helm.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
-spec:
-  replicas: {{ .Values.movieDb.replicaCount | default 1 }}
-  selector:
-    matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "helm.selectorLabels" . | nindent 8 }}
-    spec:
-      containers:
-        - name: movie-db
-          image: "{{ .Values.movieDb.image.repository }}:{{ .Values.movieDb.image.tag }}"
-          ports:
-            - containerPort: {{ .Values.movieDb.service.port }}
-          env:
-            - name: POSTGRES_USER
-              value: {{ .Values.movieDb.environment.POSTGRES_USER }}
-            - name: POSTGRES_PASSWORD
-              value: {{ .Values.movieDb.environment.POSTGRES_PASSWORD }}
-            - name: POSTGRES_DB
-              value: {{ .Values.movieDb.environment.POSTGRES_DB }}
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: {{ include "helm.fullname" . }}-cast-db
   labels:
     {{- include "helm.labels" . | nindent 4 }}
@@ -152,3 +124,32 @@ spec:
               value: {{ .Values.castDb.environment.POSTGRES_PASSWORD }}
             - name: POSTGRES_DB
               value: {{ .Values.castDb.environment.POSTGRES_DB }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-nginx
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.nginx.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: nginx
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.nginx.service.port }}
+          volumeMounts:
+            - name: volume-nginx
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: volume-nginx
