@@ -24,7 +24,9 @@ movieDb:
     POSTGRES_USER: movie_db_username
     POSTGRES_PASSWORD: movie_db_password
     POSTGRES_DB: movie_db_dev
-
+  service:
+    type: ClusterIP
+    port: 5432
 
 castService:
   image:
@@ -46,6 +48,9 @@ castDb:
     POSTGRES_USER: cast_db_username
     POSTGRES_PASSWORD: cast_db_password
     POSTGRES_DB: cast_db_dev
+    service:
+    type: ClusterIP
+    port: 5433
 
 nginx:
   image:
