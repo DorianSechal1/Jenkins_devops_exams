@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "helm.fullname" . }}-movie-db
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: movie-db
+        image: "{{ .Values.movieDb.image.repository }}:{{ .Values.movieDb.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.movieDb.service.port }}
+        volumeMounts:
+        - name: {{ .Values.volume.name }}-movie
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        env:
+        - name: POSTGRES_USER
+          value: "movie_db_username"
+        - name: POSTGRES_PASSWORD
+          value: "movie_db_password"
+        - name: POSTGRES_DB
+          value: "movie_db_dev"
+      volumes:
+      - name: {{ .Values.volume.name }}-movie
+        persistentVolumeClaim:
+          claimName: {{ .Values.volume.name }}-movie
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "helm.fullname" . }}-cast-db
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: cast-db
+        image: "{{ .Values.castDb.image.repository }}:{{ .Values.castDb.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.castDb.service.port }}
+        volumeMounts:
+        - name: {{ .Values.volume.name }}-cast
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        env:
+        - name: POSTGRES_USER
+          value: "cast_db_username"
+        - name: POSTGRES_PASSWORD
+          value: "cast_db_password"
+        - name: POSTGRES_DB
+          value: "cast_db_dev"
+      volumes:
+      - name: {{ .Values.volume.name }}-cast
+        persistentVolumeClaim:
+          claimName: {{ .Values.volume.name }}-cast

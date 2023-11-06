@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.volume.name }}-movie
+  namespace : {{ .Values.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.volume.accessMode }}
+  storageClassName: {{ .Values.volume.storageClassName}}
+  resources:
+    requests:
+      storage: {{ .Values.volume.storage}}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.volume.name }}-cast
+  namespace : {{ .Values.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.volume.accessMode }}
+  storageClassName: {{ .Values.volume.storageClassName}}
+  resources:
+    requests:
+      storage: {{ .Values.volume.storage}}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.volume.name }}-nginx
+  namespace : {{ .Values.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.volume.accessMode }}
+  storageClassName: {{ .Values.volume.storageClassName}}
+  resources:
+    requests:
+      storage: {{ .Values.volume.storage}}

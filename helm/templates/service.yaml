@@ -14,7 +14,6 @@ spec:
   selector:
     {{- include "helm.selectorLabels" . | nindent 4 }}
     app: movieService
-
 ---
 apiVersion: v1
 kind: Service
@@ -32,7 +31,6 @@ spec:
   selector:
     {{- include "helm.selectorLabels" . | nindent 4 }}
     app: castService
-
 ---
 apiVersion: v1
 kind: Service
